@@ -1,18 +1,19 @@
 import React from 'react'
-import {HeaderButton} from "react-navigation-header-buttons"
-import {Ionicons} from "@expo/vector-icons"
-import {Platform} from 'react-native'
+import {Platform} from "react-native";
+import {HeaderButton} from 'react-navigation-header-buttons'
+import {Ionicons} from "@expo/vector-icons";
 import Colors from '../constants/colors'
 
 const CustomHeaderButton = props => {
     return (
         <HeaderButton
             {...props}
-            size={23}
             IconComponent={Ionicons}
-            color={Platform.OS === 'android' ? '#fff' : Colors.mainColor}
+            iconSize={23}
+            color={Platform.OS === 'android' ? 'white' : Colors.mainColor}
         />
     )
 }
+
 
 export default CustomHeaderButton
