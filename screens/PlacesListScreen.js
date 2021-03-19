@@ -1,13 +1,13 @@
 import React from 'react'
-import {View, Text, StyleSheet, Platform} from "react-native"
-import {HeaderButtons, Item} from "react-navigation-header-buttons"
+import { View, Text, StyleSheet, Platform } from 'react-native'
+import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import CustomHeaderButton from "../components/HeaderButton"
 
 const PlacesListScreen = props => {
 
     return (
         <View>
-            <Text>Tu będze lista miejsc</Text>
+            <Text>Tu będzie lista miejsc</Text>
         </View>
     )
 }
@@ -15,18 +15,18 @@ const PlacesListScreen = props => {
 PlacesListScreen.navigationOptions = navData => {
     return {
         headerTitle: 'Wszystkie miejsca',
-        headerRight: () =>
+        headerRight: (
             <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
                 <Item
                     title='Menu'
-                    iconName={Platform.OS === 'android' ? 'add-sharp' : 'ios-add-sharp'}
+                    iconName='md-add'
                     onPress={() => {
-                        navData.navigation.navigate('EditProducts')
+                        console.log('Click')
+                        navData.navigation.navigate({routeName: 'NewPlace'});
                     }}
                 />
-            </HeaderButtons>,
-
-
+            </HeaderButtons>
+        ),
     }
 }
 
