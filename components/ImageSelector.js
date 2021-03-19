@@ -1,10 +1,12 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {View, Button, Text, StyleSheet, Image, Alert} from "react-native";
 import * as ImagePicker from 'expo-image-picker'
 import * as Permissions from 'expo-permissions'
 import Colors from '../constants/colors'
 
 const ImageSelector = props => {
+
+    const [pickedImage, setPickedImage] = useState()
 
     //na androidzie nie jest wymagane specjalne pozwolenie na korzystanie z funkcji natywnych, ale na iOS tak,
     //dlatego potrzebuję dodatkowego pakietu expo.
@@ -24,14 +26,26 @@ const ImageSelector = props => {
         if (!hasPermission) {
             return;
         }
-        ImagePicker.launchCameraAsync()
+        //ta funkcja może nie przyjmowac argumentów, ale chcę dodać dodatkową konfigurację, stąd obiekt
+        //w środku
+        //rezultatem tej asynchronicznej funkcji (zwraca promise) jest obraz więc zapisuję go w takiej zmienej
+        const image = await ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            aspect: [16,9],
+            quality: 0.5
+        })
+        setPickedImage(image.uri)
+        console.log(image)
     }
 
     return (
         <View style={styles.imagePicker}>
             <View style={styles.imagePreview}>
-                <Text>Nie wybrano obrazu</Text>
-                <Image style={styles.image}/>
+                {!pickedImage
+                    ? <Text>Nie wybrano obrazu</Text>
+                    : <Image style={styles.image} source={{uri: pickedImage}}/>}
+
+
             </View>
             <Button title='Wybierz zdjęcie' color={Colors.mainColor} onPress={handleTakeImage}/>
         </View>
