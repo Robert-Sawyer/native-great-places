@@ -22,7 +22,7 @@ const NewPlaceScreen = props => {
         <ScrollView>
             <View style={styles.form}>
                 <Text style={styles.label}>Nazwa</Text>
-                <TextInput style={styles.formInput} onChange={handleChangeTitle} value={titleValue}/>
+                <TextInput style={styles.formInput} value={titleValue} onChangeText={handleChangeTitle} />
                 <Button title='Dodaj miejsce' color={Colors.mainColor} onPress={handleSaveTitle}/>
             </View>
         </ScrollView>
