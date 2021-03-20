@@ -8,6 +8,7 @@ import ImageSelector from "../components/ImageSelector";
 const NewPlaceScreen = props => {
 
     const [titleValue, setTitleValue] = useState('')
+    const [image, setImage] = useState()
     const dispatch = useDispatch()
 
     const handleChangeTitle = text => {
@@ -15,8 +16,12 @@ const NewPlaceScreen = props => {
     }
 
     const handleSaveTitle = () => {
-        dispatch(placeActions.addPlace(titleValue))
+        dispatch(placeActions.addPlace(titleValue, image))
         props.navigation.goBack()
+    }
+
+    const handleTakenImage = imgPath => {
+        setImage(imgPath)
     }
 
     return (
@@ -24,7 +29,7 @@ const NewPlaceScreen = props => {
             <View style={styles.form}>
                 <Text style={styles.label}>Nazwa</Text>
                 <TextInput style={styles.formInput} value={titleValue} onChangeText={handleChangeTitle} />
-                <ImageSelector/>
+                <ImageSelector onImageTake={handleTakenImage}/>
                 <Button title='Dodaj miejsce' color={Colors.mainColor} onPress={handleSaveTitle}/>
             </View>
         </ScrollView>

@@ -35,6 +35,8 @@ const ImageSelector = props => {
             quality: 0.5
         })
         setPickedImage(image.uri)
+        //przesyłam w propsach odnośnik do obrazka, odbiera go handler w komponencie newplacescreen
+        props.onImageTake(image.uri)
         console.log(image)
     }
 
@@ -53,7 +55,10 @@ const ImageSelector = props => {
 }
 
 const styles = StyleSheet.create({
-    imagePicker: {},
+    imagePicker: {
+        alignItems: 'center',
+        marginBottom: 10,
+    },
     imagePreview: {
         width: '100%',
         height: 200,
