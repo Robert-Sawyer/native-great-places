@@ -1,9 +1,10 @@
 import React, {useState} from 'react'
-import {View, Text, TextInput, ScrollView, Button, StyleSheet} from "react-native";
+import {View, Text, TextInput, ScrollView, Button, StyleSheet} from "react-native"
 import Colors from '../constants/colors'
 import {useDispatch} from "react-redux";
 import * as placeActions from '../store/actions/places'
-import ImageSelector from "../components/ImageSelector";
+import ImageSelector from "../components/ImageSelector"
+import LocationPicker from "../components/LocationPicker"
 
 const NewPlaceScreen = props => {
 
@@ -30,6 +31,7 @@ const NewPlaceScreen = props => {
                 <Text style={styles.label}>Nazwa</Text>
                 <TextInput style={styles.formInput} value={titleValue} onChangeText={handleChangeTitle} />
                 <ImageSelector onImageTake={handleTakenImage}/>
+                <LocationPicker/>
                 <Button title='Dodaj miejsce' color={Colors.mainColor} onPress={handleSaveTitle}/>
             </View>
         </ScrollView>
