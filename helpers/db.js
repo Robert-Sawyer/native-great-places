@@ -7,10 +7,11 @@ const db = SQLite.openDatabase('places.db')
 // nie wykonywać operacji na bazie danych z błędnymi / uszkodzonymi danymi
 export const init = () => {
     //tworzę promisa żeby w momencie wywołania funkcji init w dowolnym miejscu aplikacji zwracała obietnicę
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         db.transaction((tx) => {
                 //funkcja executesql przyjmuje 4 argumenty - zaptytanie, tablicę zależności i funkcje sukcesu i błędu
-                tx.executeSql('CREATE TABLE IF NOT EXISTS places (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, imageUri TEXT NOT NULL, address TEXT NOT NULL, latitude REAL NOT NULL, longitude REAL NOT NULL);',
+                tx.executeSql(
+                    'CREATE TABLE IF NOT EXISTS places (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, imageUri TEXT NOT NULL, address TEXT NOT NULL, latitude REAL NOT NULL, longitude REAL NOT NULL);',
                     [],
                     () => {
                         resolve()
@@ -21,15 +22,15 @@ export const init = () => {
             }
         )
     })
-    return promise
 }
 
 export const insertPlace = (title, img, address, lat, lng) => {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         db.transaction((tx) => {
                 //nie używam w zapytaniu backtików `` i znaku dolara bo to furtka do ataku SQL Injection, zamiast
                 // tego daję znaki zapytania a wartości przesyłam w tablicy argumentów
-                tx.executeSql('INSERT INTO places (title, imageUri, address, latitude, longitude) VALUES (?, ?, ?, ?, ?);',
+                tx.executeSql(
+                    'INSERT INTO places (title, imageUri, address, latitude, longitude) VALUES (?, ?, ?, ?, ?);',
                     [title, img, address, lat, lng],
                     (_, result) => {
                         resolve(result)
@@ -40,5 +41,20 @@ export const insertPlace = (title, img, address, lat, lng) => {
             }
         )
     })
-    return promise
+}
+
+export const fetchPlaces = () => {
+    return new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+                tx.executeSql('SELECT * FROM places;',
+                    [],
+                    (_, result) => {
+                        resolve(result)
+                    },
+                    (_, err) => {
+                        reject(err)
+                    })
+            }
+        )
+    })
 }

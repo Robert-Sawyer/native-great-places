@@ -1,4 +1,4 @@
-import {ADD_PLACE} from "../actions/places";
+import {ADD_PLACE, SET_PLACES} from "../actions/places";
 import {exp} from "react-native-reanimated";
 import Place from "../../models/Place";
 
@@ -16,6 +16,17 @@ const placesReducer = (state = initialState, action) => {
             )
             return {
                 places: state.places.concat(newPlace)
+            }
+        case SET_PLACES:
+            return {
+                places: action.places.map(place =>
+                    new Place(
+                        place.id.toString(),
+                        place.title,
+                        place.imageUri,
+                        place.latitude,
+                        place.longitude
+                    ))
             }
         default:
             return state
