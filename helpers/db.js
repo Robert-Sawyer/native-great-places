@@ -23,3 +23,22 @@ export const init = () => {
     })
     return promise
 }
+
+export const insertPlace = (title, img, address, lat, lng) => {
+    const promise = new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+                //nie używam w zapytaniu backtików `` i znaku dolara bo to furtka do ataku SQL Injection, zamiast
+                // tego daję znaki zapytania a wartości przesyłam w tablicy argumentów
+                tx.executeSql('INSERT INTO places (title, imageUri, address, latitude, longitude) VALUES (?, ?, ?, ?, ?);',
+                    [title, img, address, lat, lng],
+                    (_, result) => {
+                        resolve(result)
+                    },
+                    (_, err) => {
+                        reject(err)
+                    })
+            }
+        )
+    })
+    return promise
+}
