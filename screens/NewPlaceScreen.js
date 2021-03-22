@@ -31,7 +31,7 @@ const NewPlaceScreen = props => {
                 <Text style={styles.label}>Nazwa</Text>
                 <TextInput style={styles.formInput} value={titleValue} onChangeText={handleChangeTitle} />
                 <ImageSelector onImageTake={handleTakenImage}/>
-                <LocationPicker/>
+                <LocationPicker navigation={props.navigation}/>
                 <Button title='Dodaj miejsce' color={Colors.mainColor} onPress={handleSaveTitle}/>
             </View>
         </ScrollView>

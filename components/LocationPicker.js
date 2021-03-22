@@ -31,7 +31,7 @@ const LocationPicker = props => {
             setIsLoading(true)
             const location = await Location.getCurrentPositionAsync()
             console.log(location.coords.latitude)
-            await setPickedLocation({
+            setPickedLocation({
                 lat: location.coords.latitude,
                 lon: location.coords.longitude
             })
@@ -44,9 +44,15 @@ const LocationPicker = props => {
         console.log(pickedLocation)
     }
 
+    const handlePickOnMap = () => {
+        //props.navigation jest dostępny tylko w przypadku komponentów stanowiących ekrany, a mniejsze komponenty
+        //nie mogą korzystać z tego w taki sposób, dlatego przekazuję props.navigation jako kolejny prop z NewPlaceScreen
+        props.navigation.navigate('Map')
+    }
+
     return (
         <View style={styles.locationPicker}>
-            <MapPreview style={styles.mapPreview} location={pickedLocation}>
+            <MapPreview style={styles.mapPreview} location={pickedLocation} onPress={handlePickOnMap}>
                 {isLoading
                     ? (
                         <ActivityIndicator size='large' color={Colors.mainColor}/>
@@ -54,7 +60,10 @@ const LocationPicker = props => {
                         <Text>Nie ustawiono jescze lokalizacji</Text>
                     )}
             </MapPreview>
-            <Button title='Pobierz moją lokalizację' color={Colors.mainColor} onPress={handleGetLocation}/>
+            <View style={styles.buttonsContainer}>
+                <Button title='Pobierz lokalizację' color={Colors.mainColor} onPress={handleGetLocation}/>
+                <Button title='Wskaż na mapie' color={Colors.mainColor} onPress={handlePickOnMap}/>
+            </View>
         </View>
     )
 }
@@ -69,6 +78,11 @@ const styles = StyleSheet.create({
         height: 150,
         borderWidth: 1,
         borderColor: '#ccc',
+    },
+    buttonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '100%',
     },
 })
 

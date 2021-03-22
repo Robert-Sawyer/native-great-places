@@ -1,5 +1,5 @@
 import React from 'react'
-import {ActivityIndicator, Image, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, Image, StyleSheet, TouchableOpacity, View} from "react-native";
 import ENV from '../constants/env'
 
 const MapPreview = props => {
@@ -17,9 +17,9 @@ const MapPreview = props => {
 
     return (
         //jeśli lokalizacja będzie ustawiona to wtedy wyrenderuj obraz mapy a jeśli nie to spinner lub text
-        <View style={{...styles.mapPreview, ...props.style}}>
+        <TouchableOpacity onPress={props.onPress} style={{...styles.mapPreview, ...props.style}}>
             {props.location ? <Image style={styles.mapImage} source={{uri: imagePreviewUrl}}/> : props.children}
-        </View>
+        </TouchableOpacity>
     )
 }
 
