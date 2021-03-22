@@ -9,6 +9,14 @@ const PlaceDetailsScreen = props => {
     const placeId = props.navigation.getParam('placeId')
     const selectedPlace = useSelector(state => state.places.places.find(place => place.id === placeId))
 
+    //wysyłam do ekranu z mapą informację o tym, że mapa ma być w przypadku prześcia z ekranu z detalami tylko do
+    // odczytu oraz info o lokalizacji miejsca, żeby mapa ustawiła sobie znacznik. Odbiorę te dane w mapscreen
+    //jako parametry dzięki getParam
+    const selectedPlaceLocation = {lat: selectedPlace.latitude, lon: selectedPlace.longitude}
+    const handleShowMap = () => {
+        props.navigation.navigate('Map', { readOnly: true, initialLocation: selectedPlaceLocation})
+    }
+
     return (
         <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
             <Image style={styles.image} source={{uri: selectedPlace.image}}/>
@@ -16,7 +24,7 @@ const PlaceDetailsScreen = props => {
                 <View style={styles.addressContainer}>
                     <Text style={styles.address}>{selectedPlace.address}</Text>
                 </View>
-                <MapPreview style={styles.mapPreview} location={{lat: selectedPlace.latitude, lon: selectedPlace.longitude}}/>
+                <MapPreview style={styles.mapPreview} location={selectedPlaceLocation} onPress={handleShowMap}/>
             </View>
         </ScrollView>
     )
