@@ -1,6 +1,7 @@
-import React, {useState} from 'react'
-import {View, Text, StyleSheet} from "react-native"
+import React, {useState, useEffect, useCallback} from 'react'
+import {View, Text, StyleSheet, TouchableOpacity, Platform} from "react-native"
 import MapView, {Marker} from "react-native-maps";
+import Colors from '../constants/colors'
 
 const MapScreen = props => {
 
@@ -21,6 +22,22 @@ const MapScreen = props => {
         })
     }
 
+    const handleSavePickedLocation = useCallback(() => {
+        if (!selectedLocation) {
+            //można dodać alert, że nie wybrano żadnej lokalizacji
+            return;
+        }
+        //zapisuję w state lokalizację markera i przekazuję go na ekran zapisu miejsca gdzie kieruję usera po kliknięciu
+        //w zapisz
+        props.navigation.navigate('NewPlace', { pickedLocation: selectedLocation})
+
+        //gdy tylko selectedloation się zmieni, czyli user kliknie i ustawi marker wtedy wykona się funkcja powrotu
+    },[selectedLocation])
+
+    useEffect(() => {
+        props.navigation.setParams({saveLocation: handleSavePickedLocation})
+    }, [handleSavePickedLocation])
+
     let markerCoordinates
 
     if (selectedLocation) {
@@ -38,9 +55,28 @@ const MapScreen = props => {
     )
 }
 
+MapScreen.navigationOptions = navData => {
+    const saveFunction = navData.navigation.getParam('saveLocation')
+    return {
+        headerTitle: 'Mapa',
+        headerRight: () => (
+            <TouchableOpacity styles={styles.headerButton} onPress={saveFunction}>
+                <Text style={styles.headerButtonText}>Zapisz</Text>
+            </TouchableOpacity>
+        )
+    }
+}
+
 const styles = StyleSheet.create({
     map: {
         flex: 1,
+    },
+    headerButton: {
+        marginHorizontal: 20,
+    },
+    headerButtonText: {
+        fontSize: 16,
+        color: Platform.OS === 'android' ? '#fff' : Colors.mainColor
     },
 })
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {View, Text, Button, StyleSheet, Alert, ActivityIndicator} from "react-native"
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
@@ -9,6 +9,17 @@ const LocationPicker = props => {
 
     const [isLoading, setIsLoading] = useState(false)
     const [pickedLocation, setPickedLocation] = useState()
+
+    const mapPickedLocation = props.navigation.getParam('pickedLocation')
+
+    //tutaj robię taki trick - jeśli user nie ustawił lokalizacji za pomoca urzadzenia, tylko recznie na mapie,
+    // to za każdym razem gdy to zrobi, to pickedLocation, nawet jeśli jest zdefiniowana zostanie na nowo ustawiona
+    //na podstawie markera, a koordynaty tego pobieram z obiektu navigationOption, gdzie ustawiłem parametr w MapScreen
+    useEffect(() => {
+        if (mapPickedLocation) {
+            setPickedLocation(mapPickedLocation)
+        }
+    }, [mapPickedLocation])
 
     const verifyPermission = async () => {
         const result = await Permissions.askAsync(Permissions.LOCATION)
