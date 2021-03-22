@@ -1,5 +1,4 @@
 import {ADD_PLACE, SET_PLACES} from "../actions/places";
-import {exp} from "react-native-reanimated";
 import Place from "../../models/Place";
 
 const initialState = {

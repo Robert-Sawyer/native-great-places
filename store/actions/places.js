@@ -4,7 +4,6 @@ import ENV from '../../constants/env'
 export const ADD_PLACE = 'ADD_PLACE'
 export const SET_PLACES = 'SET_PLACES'
 import {insertPlace, fetchPlaces} from "../../helpers/db";
-import {add} from "react-native-reanimated";
 
 export const addPlace = (title, image, location) => {
     return async dispatch => {
