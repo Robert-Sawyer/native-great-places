@@ -12,14 +12,17 @@ const LocationPicker = props => {
 
     const mapPickedLocation = props.navigation.getParam('pickedLocation')
 
+    const {onLocationPicked} = props
+
     //tutaj robię taki trick - jeśli user nie ustawił lokalizacji za pomoca urzadzenia, tylko recznie na mapie,
     // to za każdym razem gdy to zrobi, to pickedLocation, nawet jeśli jest zdefiniowana zostanie na nowo ustawiona
     //na podstawie markera, a koordynaty tego pobieram z obiektu navigationOption, gdzie ustawiłem parametr w MapScreen
     useEffect(() => {
         if (mapPickedLocation) {
             setPickedLocation(mapPickedLocation)
+            onLocationPicked(mapPickedLocation)
         }
-    }, [mapPickedLocation])
+    }, [mapPickedLocation, onLocationPicked])
 
     const verifyPermission = async () => {
         const result = await Permissions.askAsync(Permissions.LOCATION)
@@ -41,8 +44,13 @@ const LocationPicker = props => {
         try {
             setIsLoading(true)
             const location = await Location.getCurrentPositionAsync()
-            console.log(location.coords.latitude)
+            // console.log(location.coords.latitude)
             setPickedLocation({
+                lat: location.coords.latitude,
+                lon: location.coords.longitude
+            })
+            //robię to, co w imageselector - przekazuję dane na temat lokalizacji do komponentu nadrzędnego - newPlace
+            props.onLocationPicked({
                 lat: location.coords.latitude,
                 lon: location.coords.longitude
             })
@@ -52,7 +60,7 @@ const LocationPicker = props => {
             ])
         }
         setIsLoading(false)
-        console.log(pickedLocation)
+        // console.log(pickedLocation)
     }
 
     const handlePickOnMap = () => {

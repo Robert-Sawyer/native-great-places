@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useCallback} from 'react'
 import {View, Text, TextInput, ScrollView, Button, StyleSheet} from "react-native"
 import Colors from '../constants/colors'
 import {useDispatch} from "react-redux";
@@ -10,6 +10,7 @@ const NewPlaceScreen = props => {
 
     const [titleValue, setTitleValue] = useState('')
     const [image, setImage] = useState()
+    const [selectedLocation, setSelectedLocation] = useState()
     const dispatch = useDispatch()
 
     const handleChangeTitle = text => {
@@ -17,7 +18,7 @@ const NewPlaceScreen = props => {
     }
 
     const handleSaveTitle = () => {
-        dispatch(placeActions.addPlace(titleValue, image))
+        dispatch(placeActions.addPlace(titleValue, image, selectedLocation))
         props.navigation.goBack()
     }
 
@@ -25,13 +26,18 @@ const NewPlaceScreen = props => {
         setImage(imgPath)
     }
 
+    const handlePickedLocation = useCallback((location) => {
+        setSelectedLocation(location)
+    }, [setSelectedLocation])
+
+
     return (
         <ScrollView>
             <View style={styles.form}>
                 <Text style={styles.label}>Nazwa</Text>
                 <TextInput style={styles.formInput} value={titleValue} onChangeText={handleChangeTitle} />
                 <ImageSelector onImageTake={handleTakenImage}/>
-                <LocationPicker navigation={props.navigation}/>
+                <LocationPicker navigation={props.navigation} onLocationPicked={handlePickedLocation}/>
                 <Button title='Dodaj miejsce' color={Colors.mainColor} onPress={handleSaveTitle}/>
             </View>
         </ScrollView>
